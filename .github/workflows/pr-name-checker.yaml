@@ -1,0 +1,26 @@
+name: Check PR title for compliance
+run-name: ${{ github.actor }} runs Check PR title for compliance
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  conventional-commits:
+    name: Semantic Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: validate
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // See https://gist.github.com/marcojahn/482410b728c31b221b70ea6d2c433f0c#file-conventional-commit-regex-md
+            const regex = /^(docs|ci|bugfix|refactor|feature|release|no-release){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)/g;
+            const pr = context.payload.pull_request;
+            const title = pr.title;
+            if (title.match(regex) == null) {
+              throw PR title "${title}" does not match conventional commits from allowed list: docs:, ci:, bugfix:, refactor:, feature:, release:, no-release:
+            }

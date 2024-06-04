@@ -1,0 +1,24 @@
+name: Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      scanner:
+        description: 'Select scanner'
+        required: true
+        default: 'trivy'
+        type: choice
+        options:
+        - trivy
+        - sonarqube
+        - selenium
+        - snyk
+
+jobs:
+  build:
+    name: Build and push docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: build
+        run: echo "builing image for ${{ inputs.scanner }}" && sleep 10

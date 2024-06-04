@@ -1,0 +1,19 @@
+name: Dependent workflow
+
+on:
+  workflow_run:
+    workflows:
+      - Trigger
+    types: 
+      - completed
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Dependend workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: build
+        run: echo "Running Dependend workflow" && sleep 10
