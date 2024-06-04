@@ -1,5 +1,3 @@
-
-
 name: Parallel and dependecies between jobs
 run-name: ${{ github.actor }} runs demo parallel and dependecies between jobs
 

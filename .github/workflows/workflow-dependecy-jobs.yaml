@@ -1,9 +1,9 @@
 name: Dependent workflow
-
+run-name: ${{ github.actor }} runs demo dependent workflow
 on:
   workflow_run:
     workflows:
-      - Trigger
+      - "Trigger workflow for tests"
     types: 
       - completed
     branches:

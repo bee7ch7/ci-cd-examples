@@ -1,4 +1,5 @@
 name: Manual run
+run-name: ${{ github.actor }} runs demo manual run
 
 on:
   workflow_dispatch:
