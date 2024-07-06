@@ -1,0 +1,8 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  script: |
+    echo "Running deploy"
+    sleep 10

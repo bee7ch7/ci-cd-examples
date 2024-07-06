@@ -1,0 +1,36 @@
+---
+image: ubuntu:latest
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  GIT_DEPTH: 0
+
+test:
+  stage: test
+  variables:
+    VERIFY_DEPLOYMENT: 1
+  script: |
+    echo "Running tests"
+
+build:
+  stage: build
+  needs:
+    - test
+  variables:
+    VERIFY_DEPLOYMENT: 1
+  script: |
+    echo "Running build"
+
+deploy:
+  stage: deploy
+  needs:
+    - build
+  variables:
+    VERIFY_DEPLOYMENT: 1
+  script: |
+    echo "Running deploy"
+  when: manual

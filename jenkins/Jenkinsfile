@@ -1,0 +1,62 @@
+pipeline {
+  environment {
+    imagename = "bee7ch/jenkins-example"
+    registryCredential = 'dockerhub_id'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('List Files') {
+            steps {
+                sh 'ls -la'
+            }
+        }
+    stage('Cloning Git') {
+      steps {
+        git([url: 'git@github.com:bee7ch7/jenkins-example.git', branch: 'main', credentialsId: 'github_id'])
+
+      }
+    }
+    stage('Test') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        echo 'Running Unit Tests...'
+                        // Insert your unit test commands here, e.g., mvn test
+                    }
+                }
+                stage('Integration Tests') {
+                    steps {
+                        echo 'Running Integration Tests...'
+                        // Insert your integration test commands here
+                    }
+                }
+                stage('Static Code Analysis') {
+                    steps {
+                        echo 'Running Static Code Analysis...'
+                        // Insert your static code analysis commands here, e.g., mvn sonar:sonar
+                    }
+                }
+            }
+        }
+    stage('Building image') {
+      steps{
+        script {
+          sh "docker build -t $imagename:latest ."
+        }
+      }
+    }
+    stage('Push Image') {
+      steps{
+        script {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub_id', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+            sh "docker tag $imagename:latest $imagename:$BUILD_NUMBER"
+            sh "docker push $imagename:latest"
+            sh "docker push $imagename:$BUILD_NUMBER"
+          }
+        }
+      }
+    }
+  }
+}

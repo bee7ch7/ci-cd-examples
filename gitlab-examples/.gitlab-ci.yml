@@ -1,0 +1,41 @@
+---
+
+stages:
+  - trigger
+  
+
+include-job:
+  stage: trigger
+  variables:
+    INCLUDE: ${INCLUDE}
+  trigger:
+    include: .gitlab-ci.include.yml
+  rules:
+    - if: $INCLUDE == "1"
+
+simple-job:
+  stage: trigger
+  variables:
+    SIMPLE: ${SIMPLE}
+  trigger:
+    include: .gitlab-ci.simple.yml
+  rules:
+    - if: $SIMPLE == "1"
+
+parallel-job:
+  stage: trigger
+  variables:
+    PARALLEL: ${PARALLEL}
+  trigger:
+    include: .gitlab-ci.parallel.yml
+  rules:
+    - if: $PARALLEL == "1"
+
+manual-job:
+  stage: trigger
+  variables:
+    MANUAL: ${MANUAL}
+  trigger:
+    include: .gitlab-ci.manual.yml
+  rules:
+    - if: $MANUAL == "1"

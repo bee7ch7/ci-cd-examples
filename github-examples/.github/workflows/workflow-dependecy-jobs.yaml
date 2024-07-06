@@ -1,0 +1,19 @@
+name: Dependent workflow
+run-name: ${{ github.actor }} runs demo dependent workflow
+on:
+  workflow_run:
+    workflows:
+      - "Trigger workflow for tests"
+    types: 
+      - completed
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Dependend workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: build
+        run: echo "Running Dependend workflow" && sleep 10

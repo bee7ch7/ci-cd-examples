@@ -1,0 +1,39 @@
+---
+image: ubuntu:latest
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  GIT_DEPTH: 0
+
+trivy:
+  stage: test
+  script: |
+    echo "Running tests"
+snyk:
+  stage: test
+  script: |
+    echo "Running tests"
+selenium:
+  stage: test
+  script: |
+    echo "Running tests"
+
+build:
+  stage: build
+  needs:
+    - trivy
+    - snyk
+    - selenium
+  script: |
+    echo "Running build"
+
+deploy:
+  stage: deploy
+  needs:
+    - build
+  script: |
+    echo "Running deploy"

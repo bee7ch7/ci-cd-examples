@@ -1,0 +1,42 @@
+name: Build and Deploy STAGING
+on:
+  push:
+    branches:
+      - staging
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  AWS_ROLE_NAME: "gh-role"
+  AWS_REGION_NAME: "us-east-1"
+jobs:
+  pre-init:
+    env:
+      AWS_ACCOUNT_ID: "1234567890"
+      ENV_NAME: "staging-0001"
+      ENV_ID: "staging"
+    outputs:
+      AWS_ROLE_NAME: ${{ env.AWS_ROLE_NAME }}
+      AWS_REGION_NAME: ${{ env.AWS_REGION_NAME }}
+      AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
+      ENV_NAME: ${{ env.ENV_NAME }}
+      ENV_ID: ${{ env.ENV_ID }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: time
+        run: |
+          time
+
+  build:
+    needs:
+      - pre-init
+    uses: ./.github/workflows/build_push_images.yaml
+    with:
+      AWS_REGION_NAME: ${{ needs.pre-init.outputs.AWS_REGION_NAME }}
+      AWS_ROLE_NAME: ${{ needs.pre-init.outputs.AWS_ROLE_NAME }}
+      AWS_ACCOUNT_ID: ${{ needs.pre-init.outputs.AWS_ACCOUNT_ID }}
+      ENV_NAME: ${{ needs.pre-init.outputs.ENV_NAME }}
+      ENV_ID: ${{ needs.pre-init.outputs.ENV_ID }}

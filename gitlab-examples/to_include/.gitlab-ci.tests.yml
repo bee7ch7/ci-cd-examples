@@ -1,0 +1,17 @@
+trivy:
+  stage: test
+  script: |
+    echo "Running tests"
+    sleep 10
+
+snyk:
+  stage: test
+  script: |
+    echo "Running tests"
+    sleep 10
+    
+selenium:
+  stage: test
+  script: |
+    echo "Running tests"
+    sleep 10

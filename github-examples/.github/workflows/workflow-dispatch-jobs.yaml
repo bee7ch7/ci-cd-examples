@@ -1,0 +1,101 @@
+name: Manual run
+run-name: ${{ github.actor }} runs demo manual run
+
+on:
+  workflow_dispatch:
+    inputs:
+      scanner:
+        description: 'Select scanner'
+        required: true
+        default: 'trivy'
+        type: choice
+        options:
+        - trivy
+        - sonarqube
+        - selenium
+        - snyk
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+      branch_name:
+        description: 'Select branch'
+        required: true
+        default: 'non_existing'
+        type: string
+      notify:
+        description: 'notify or skip'
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Build and push docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: build
+        run: echo "builing image" && sleep 10
+  trivy:
+    name: Testing with trivy
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: ${{ inputs.scanner }} == "trivy"
+    steps:
+      - uses: actions/checkout@v3
+      - name: tests
+        run: |
+          echo "running ${{ inputs.scanner }}"
+          sleep 10
+  snyk:
+    name: Testing with snyk
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: ${{ inputs.scanner }} == "snyk"
+    steps:
+      - uses: actions/checkout@v3
+      - name: tests
+        run: |
+          echo "running ${{ inputs.scanner }}"
+          sleep 10
+  sonarqube:
+    name: Testing with sonarqube
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: ${{ inputs.scanner }} == "sonarqube"
+    steps:
+      - uses: actions/checkout@v3
+      - name: tests
+        run: |
+          echo "running ${{ inputs.scanner }}"
+          sleep 10
+  selenium:
+    name: Testing with selenium
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: ${{ inputs.scanner }} == "selenium"
+    steps:
+      - uses: actions/checkout@v3
+      - name: tests
+        run: |
+          echo "running ${{ inputs.scanner }}"
+          sleep 10
+
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "SCANNER: $SCANNER"
+          echo "Tags: $TAGS"
+          echo "Branch: $BRANCH_NAME"
+          echo "Notify: $notify"
+          echo ref = ${{ github.ref }}
+          echo head_ref = ${{ github.head_ref }}
+          echo base_ref = ${{ github.base_ref }}
+        env:
+          SCANNER: ${{ inputs.scanner }}
+          TAGS: ${{ inputs.notify }}
+          BRANCH_NAME: ${{ inputs.branch_name }}
+          notify: ${{ inputs.notify }}
+          

@@ -1,0 +1,9 @@
+
+stages:
+  - build
+
+build-image:
+  stage: build
+  script: |
+    echo "Running builds"
+    sleep 10
