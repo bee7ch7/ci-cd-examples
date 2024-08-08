@@ -75,6 +75,7 @@ jobs:
           path: ${{ github.workspace }}/get-plan/${{ steps.tf_plan.outputs.tf_plan_name }}
 
       - name: Show plan
+        if: success() && github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           ls -la
           cd ${{ github.workspace }}/get-plan
