@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         folders: ${{ fromJSON(needs.getFolders.outputs.matrix) }}
-        envs: ["dev", "stage", "prod"]
+        #envs: ["dev", "stage", "prod"]
     steps:
       - uses: actions/checkout@v3
       - name: Building docker image in ${{ matrix.folders }}
